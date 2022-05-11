@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Файлы с исходным кодом">
+      <UniqueIdentifier>{c9c54d6e-c358-493d-8fda-aa2318747b2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы с исходным кодом\2">
+      <UniqueIdentifier>{9f2fbd63-fdd6-45dc-b852-2f5e23a5f4ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы с исходным кодом\3">
+      <UniqueIdentifier>{0208a885-adb3-41dd-a189-fa0b91481909}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы с исходным кодом\3\Заголовки">
+      <UniqueIdentifier>{eeb055fa-eb01-482d-a4fa-d2c1bcc18e33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы с исходным кодом\3\коды">
+      <UniqueIdentifier>{3d787741-10fb-40f2-9d76-60fb4d942a18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы с исходным кодом\1">
+      <UniqueIdentifier>{45a752de-f7c4-4cec-b721-808e7b85d6dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы с исходным кодом\4">
+      <UniqueIdentifier>{9aec53c5-4690-4be7-8177-0210477eb954}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы с исходным кодом\4\123">
+      <UniqueIdentifier>{63a46917-7095-472b-9788-088f5d802152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы с исходным кодом\4\1_2_4">
+      <UniqueIdentifier>{d63c0deb-e2c5-4418-946a-7f9aed9a5642}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы с исходным кодом\4\411">
+      <UniqueIdentifier>{22ec8ebe-694a-4aaf-b347-bdbd6987e544}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы с исходным кодом\4\32171">
+      <UniqueIdentifier>{15b40222-63a8-4a46-8464-2f6c01c736a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы с исходным кодом\4\421">
+      <UniqueIdentifier>{b1dc61c8-a968-4d8c-b893-320cf133f7d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы с исходным кодом\531">
+      <UniqueIdentifier>{9008b47a-fe07-46f1-97e5-ebaf64cffae1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы с исходным кодом\912">
+      <UniqueIdentifier>{05d89f26-dd3e-47d5-ae70-ba9ccd4555ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы с исходным кодом\кл31">
+      <UniqueIdentifier>{390a38bd-e898-40c7-814a-20f2b181f011}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="a.cpp">
+      <Filter>Файлы с исходным кодом</Filter>
+    </ClCompile>
+    <ClCompile Include="2_1_2.cpp">
+      <Filter>Файлы с исходным кодом\2</Filter>
+    </ClCompile>
+    <ClCompile Include="2_1_3.cpp">
+      <Filter>Файлы с исходным кодом\2</Filter>
+    </ClCompile>
+    <ClCompile Include="2_1_1.cpp">
+      <Filter>Файлы с исходным кодом\2</Filter>
+    </ClCompile>
+    <ClCompile Include="3_1_1.cpp">
+      <Filter>Файлы с исходным кодом\3\коды</Filter>
+    </ClCompile>
+    <ClCompile Include="3_1_2.cpp">
+      <Filter>Файлы с исходным кодом\3\коды</Filter>
+    </ClCompile>
+    <ClCompile Include="3_1_3.cpp">
+      <Filter>Файлы с исходным кодом\3\коды</Filter>
+    </ClCompile>
+    <ClCompile Include="Задание 1_1_5.cpp">
+      <Filter>Файлы с исходным кодом\1</Filter>
+    </ClCompile>
+    <ClCompile Include="Задание 1_1_2.cpp">
+      <Filter>Файлы с исходным кодом\1</Filter>
+    </ClCompile>
+    <ClCompile Include="Задание 1_1_1.cpp">
+      <Filter>Файлы с исходным кодом\1</Filter>
+    </ClCompile>
+    <ClCompile Include="Array.cpp">
+      <Filter>Файлы с исходным кодом\2</Filter>
+    </ClCompile>
+    <ClCompile Include="header1.cpp">
+      <Filter>Файлы с исходным кодом\3\Заголовки</Filter>
+    </ClCompile>
+    <ClCompile Include="Class2.cpp">
+      <Filter>Файлы с исходным кодом\3\Заголовки</Filter>
+    </ClCompile>
+    <ClCompile Include="header3_1_3.cpp">
+      <Filter>Файлы с исходным кодом\3\Заголовки</Filter>
+    </ClCompile>
+    <ClCompile Include="funcs.h">
+      <Filter>Файлы с исходным кодом\3\коды</Filter>
+    </ClCompile>
+    <ClCompile Include="funcs.cpp">
+      <Filter>Файлы с исходным кодом\3\коды</Filter>
+    </ClCompile>
+    <ClCompile Include="123.cpp">
+      <Filter>Файлы с исходным кодом\4\123</Filter>
+    </ClCompile>
+    <ClCompile Include="Header123.cpp">
+      <Filter>Файлы с исходным кодом\4\123</Filter>
+    </ClCompile>
+    <ClCompile Include="124.cpp">
+      <Filter>Файлы с исходным кодом\4\1_2_4</Filter>
+    </ClCompile>
+    <ClCompile Include="Header124.cpp">
+      <Filter>Файлы с исходным кодом\4\1_2_4</Filter>
+    </ClCompile>
+    <ClCompile Include="411.cpp">
+      <Filter>Файлы с исходным кодом\4\411</Filter>
+    </ClCompile>
+    <ClCompile Include="Header411.cpp">
+      <Filter>Файлы с исходным кодом\4\411</Filter>
+    </ClCompile>
+    <ClCompile Include="Source.cpp">
+      <Filter>Файлы с исходным кодом\4\411</Filter>
+    </ClCompile>
+    <ClCompile Include="32171.cpp">
+      <Filter>Файлы с исходным кодом\4\32171</Filter>
+    </ClCompile>
+    <ClCompile Include="421.cpp">
+      <Filter>Файлы с исходным кодом\4\421</Filter>
+    </ClCompile>
+    <ClCompile Include="441.cpp">
+      <Filter>Файлы с исходным кодом\4</Filter>
+    </ClCompile>
+    <ClCompile Include="531.cpp">
+      <Filter>Файлы с исходным кодом\531</Filter>
+    </ClCompile>
+    <ClCompile Include="header531.cpp">
+      <Filter>Файлы с исходным кодом\531</Filter>
+    </ClCompile>
+    <ClCompile Include="912.cpp">
+      <Filter>Файлы с исходным кодом\912</Filter>
+    </ClCompile>
+    <ClCompile Include="кл31.cpp">
+      <Filter>Файлы с исходным кодом\кл31</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MyClass.h">
+      <Filter>Файлы с исходным кодом\2</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle.h">
+      <Filter>Файлы с исходным кодом\2</Filter>
+    </ClInclude>
+    <ClInclude Include="Array.h">
+      <Filter>Файлы с исходным кодом\2</Filter>
+    </ClInclude>
+    <ClInclude Include="header1.h">
+      <Filter>Файлы с исходным кодом\3\Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="Class1.h">
+      <Filter>Файлы с исходным кодом\3\Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="header3_1_3.h">
+      <Filter>Файлы с исходным кодом\3\Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="Class2.h">
+      <Filter>Файлы с исходным кодом\3\Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="Header123.h">
+      <Filter>Файлы с исходным кодом\4\123</Filter>
+    </ClInclude>
+    <ClInclude Include="Header124.h">
+      <Filter>Файлы с исходным кодом\4\1_2_4</Filter>
+    </ClInclude>
+    <ClInclude Include="Header411.h">
+      <Filter>Файлы с исходным кодом\4\411</Filter>
+    </ClInclude>
+    <ClInclude Include="header531.h">
+      <Filter>Файлы с исходным кодом\531</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
