@@ -226,7 +226,10 @@
     <ClCompile Include="Задание 1_1_5.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="кл31.cpp" />
+    <ClCompile Include="кл31.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="кл32.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class2.h" />
