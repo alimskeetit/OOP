@@ -10,6 +10,7 @@ protected:
 	vector<Base*> childs;
 	void unready_em_all();
 public:
+	string last_adress;
 	bool ready = false;
 	Base(Base* ptr_head = nullptr, string name = "") : ptr_head(ptr_head), name(name) {};
 	void set_name();
@@ -24,6 +25,64 @@ public:
 };
 
 string is_ready(Base& obj);
+
+vector<string> decode(string str) {
+	vector<string> vec;
+	string new_str;
+	int count = 0;
+	for (int i = 0; i != str.length(); ++i) {
+		if (str[i] == '/') ++count;
+	}
+	vec.reserve(count + 1);
+	str += '/';
+	for (int i = 0; i != str.length(); ++i) {
+		if (str[i] != '/') new_str += str[i];
+		else {
+			if (new_str != "") vec.push_back(new_str);
+			new_str = "";
+		}
+	}
+	return vec;
+}
+
+string set_find_moment(Base *obj1) {
+	vector<string> vec;
+	Base* obj = obj1;
+	string string_to_return, str, set;
+	cin >> str;
+	while (true) {
+		if (str == "FIND") {
+			cin >> str;
+			string_to_return += str + "     ";
+			if (str == ".") str = set;
+			else {
+				vec = decode(str);
+				for (auto& name : vec) {
+					obj = obj->find_(name);
+				}
+				if (obj) str = obj->get_name();
+			}
+			string_to_return += (obj) ? "Object name: " + str : "Object is not found";
+		}
+		else if (str == "SET") {
+			cin >> str;
+			vec = decode(str);
+			for (auto& name : vec) {
+				obj = obj->find_(name);
+			}
+			if (obj) set = obj->get_name();
+			if (obj) string_to_return += "Object is set: " + set;
+			else string_to_return += "Object is not found: " + set + " " + str;
+		}
+		else if (str == "END") {
+			string_to_return.pop_back();
+			return string_to_return;
+		}
+		string_to_return += '\n';
+		obj = obj1;
+		cin >> str;
+	}
+}
 
 class cl1 : public Base {
 public:
@@ -67,8 +126,8 @@ public:
 	App(Base* ptr_head) : Base(ptr_head) {};
 	void build_tree();
 	void build_tree_new();
-	void build_tree_new_new();
-	bool exe();
+	bool build_tree_new_new();
+	bool exe(bool f = 0);
 };
 
 void Base::set_name() {
@@ -119,16 +178,19 @@ void App::build_tree() {
 	}
 }
 
-bool App::exe() {
+bool App::exe(bool f) {
+	//вывод дерева
 	cout << "Object tree\n";
 	cout << this->get_name();
 	this->new_out();
-	this->set_ready();
-	cout << "\nThe tree of objects and their readiness\n";
-	cout << this->get_name() << is_ready(*this);
-	this->new_out(is_ready);
+	if (f) { //если build_tree_new_new построен с ошибкой, то
+		cout << "The head object " << this->last_adress << " is not found"; 
+		return 0;
+	}
+	cout << set_find_moment(this);
 	return 0;
 }
+
 
 void Base::set_name(string name) {
 	this->name = name;
@@ -230,42 +292,30 @@ void App::build_tree_new() {
 	}
 }
 
-vector<string> decode(string str) {
-	vector<string> vec;
-	string new_str;
-	int count = 0;
-	for (int i = 1; i != str.length(); ++i) {
-		if (str[i] == '/') ++count;
-	}
-	vec.reserve(count + 1);
-	str += '/';
-	for (int i = 1; i != str.length(); ++i) {
-		if (str[i] != '/') new_str += str[i];
-		else {
-			vec.push_back(new_str);
-			new_str = "";
-		}
-	}
-	return vec;
-}
-void App::build_tree_new_new() {
+
+
+bool App::build_tree_new_new() {
 	this->set_name();
 	vector<string> vec;
-	cl1* obj1 = (cl1*)this;
+	cl1* obj1 = (cl1*)this; //корневой объект
 	while (true) {
 		int i;
 		string name, child_name;
 		cin >> name;
-		if (name == "endtree") break;
+		this->last_adress = name;//запомним последний адресс для того, чтобы в случае ошибки вывести его.
+		if (name == "endtree") break; //конец ввода иерархии
 		
-		if (name != "/") {
-			vec = decode(name);
+
+		obj1 = (cl1*)this;//начинаем искать от корневого
+		if (name != "/") {//если имя родителя не /, то есть не головной
+			vec = decode(name);//вызываем функцию decode расшифровывающую адрес, и получаем вектор имён
 			for (auto& name : vec) {
-				obj1 = (cl1*)obj1->find_(name);
+				obj1 = (cl1*)obj1->find_(name);//находим указатель на родителя, к которому пришпандорим ребенка
 			}
 		}
-		cin >> child_name;
-		cin >> i;
+		if (!obj1) return 1; //если родитель не найден, то возвращаем 1, как ошибку.
+		cin >> child_name;//ввод имени ребёнка
+		cin >> i;//ввод класса ребёнка
 		Base* obj2 = nullptr;
 		switch (i) {
 		case 2:
@@ -285,11 +335,10 @@ void App::build_tree_new_new() {
 			break;
 		default: break;
 		}
-		obj2->set_name(child_name);
-		obj2->set_parent(*obj1);
-		obj1 = (cl1*)this;
+		obj2->set_name(child_name);//устанавливаем новому объекту имя ребенка
+		obj2->set_parent(*obj1);//устанавливаем родителя для obj2 и ребенка для obj1
 	}
-
+	return 0;
 }
 
 string is_ready(Base& obj) {
@@ -298,6 +347,6 @@ string is_ready(Base& obj) {
 
 int main() {
 	App app(nullptr);
-	app.build_tree_new_new();
-	return app.exe();
+
+	return app.exe(app.build_tree_new_new());
 }
