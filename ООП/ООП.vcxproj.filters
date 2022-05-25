@@ -153,6 +153,9 @@
     <ClCompile Include="кл32.cpp">
       <Filter>Файлы с исходным кодом</Filter>
     </ClCompile>
+    <ClCompile Include="кл33.cpp">
+      <Filter>Файлы с исходным кодом</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyClass.h">

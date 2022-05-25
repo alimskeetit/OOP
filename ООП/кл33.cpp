@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include<algorithm>
 using namespace std;
 
 class Base {
@@ -10,9 +11,10 @@ protected:
 	vector<Base*> childs;
 	void unready_em_all();
 public:
+	string adress;//new
 	string set;
 	string last_adress;
-	bool ready = false;
+	bool ready = true;
 	Base(Base* ptr_head = nullptr, string name = "") : ptr_head(ptr_head), name(name) {};
 	void set_name();
 	void set_name(string name);
@@ -23,7 +25,60 @@ public:
 	void new_out(string(*f)(Base& obj) = nullptr, int j = 1);
 	Base* find_(const string& name);
 	void set_ready();
+	string signal();
+	string hendler(Base* obj, const string& str, const string& msg);
+	void set_connect(Base* p_obj);
+	string emit(const string& msg);
+	void delete_connect(Base* p_obj);
+	virtual string get_class() { return "(class: 0)"; };
+	vector<Base*> connections;
+	void set_connections();
+	Base* find_decode(const vector<string>& vec);
 };
+
+Base* Base::find_decode(const vector<string>& vec) {
+	Base* obj = this;
+	for (auto& name : vec) {
+		obj = obj->find_(name);
+	}
+	return obj;
+}
+
+void Base::set_connect(Base* p_obj) {
+	for (auto& it : connections) {
+		if (it == p_obj) return;
+	}
+	connections.push_back(p_obj);
+}
+
+void Base::delete_connect(Base* p_obj) {
+	for (auto it = connections.begin(); it != connections.end(); ++it) {
+		if (*it == p_obj) {
+			connections.erase(it);
+			return;
+		}
+	}
+}
+
+string Base::emit(const string& msg) {
+	string str_to_return = "";
+	if (!ready) return "";
+	str_to_return += signal();
+	for (auto& it : connections) {
+		str_to_return += '\n';
+		str_to_return += it->hendler(this, it->adress, msg);
+	}
+	return str_to_return;
+}
+
+
+string Base::signal() {
+	return "Signal from " + adress;
+}
+
+string Base::hendler(Base* obj, const string& str, const string& msg) {
+	return "Signal to " + str + " Text:  " + msg + " " + obj->get_class();
+}
 
 string is_ready(Base& obj);
 
@@ -31,7 +86,7 @@ vector<string> decode(string str, const Base& obj) {
 	vector<string> vec;
 	string new_str;
 	int count = 0;
-	if (str[0] != '/') 
+	if (str[0] != '/')
 		vec.push_back(obj.set);
 	str += '/';
 	for (int i = 0; i != str.length(); ++i) {
@@ -44,7 +99,7 @@ vector<string> decode(string str, const Base& obj) {
 	return vec;
 }
 
-string set_find_moment(Base *obj1) {
+string set_find_moment(Base* obj1) {
 	vector<string> vec;
 	Base* obj = obj1;
 	string string_to_return, str;
@@ -88,47 +143,147 @@ class cl1 : public Base {
 public:
 	cl1(Base* ptr_head = nullptr, string name = "") : Base(ptr_head, name) {};
 	vector<Base*>& get_childs() { return childs; };
+	string get_class() { return "(class: 1)"; };
 };
 
 class cl2 : public Base {
 public:
 	cl2(Base* ptr_head = nullptr, string name = "") : Base(ptr_head, name) {};
 	vector<Base*>& get_childs() { return childs; };
+	string get_class() { return "(class: 2)"; };
 };
 
 class cl3 : public Base {
 public:
 	cl3(Base* ptr_head = nullptr, string name = "") : Base(ptr_head, name) {};
 	vector<Base*>& get_childs() { return childs; };
+	string get_class() { return "(class: 3)"; };
 };
 
 class cl4 : public Base {
 public:
 	cl4(Base* ptr_head = nullptr, string name = "") : Base(ptr_head, name) {};
 	vector<Base*>& get_childs() { return childs; };
+	string get_class() { return "(class: 4)"; };
 };
 
 class cl5 : public Base {
 public:
 	cl5(Base* ptr_head = nullptr, string name = "") : Base(ptr_head, name) {};
 	vector<Base*>& get_childs() { return childs; };
+	string get_class() { return "(class: 5)"; };
 };
 
 class cl6 : public Base {
 public:
 	cl6(Base* ptr_head = nullptr, string name = "") : Base(ptr_head, name) {};
 	vector<Base*>& get_childs() { return childs; };
+	string get_class() { return "(class: 6)"; };
 };
 
 
 class App : Base {
+	Base* ptr_base;
 public:
-	App(Base* ptr_head) : Base(ptr_head) {};
+	string comands_moment();
+	App(Base* ptr_head) : Base(ptr_head), ptr_base(ptr_head) {};
 	void build_tree();
 	void build_tree_new();
 	bool build_tree_new_new();
 	bool exe(bool f = 0);
+	bool new_exe();//new
 };
+
+bool App::new_exe() {
+	cout << "Object tree\n";
+	cout << this->get_name();
+	this->new_out();
+	cout << endl;
+
+	set_connections();
+	cout << comands_moment();
+	return 0;
+}
+
+void Base::set_connections() {
+	string from, to;
+	vector<string> vec;
+	while (true) {
+		cin >> from;
+		if (from == "end_of_connections") break;
+		cin >> to;
+		vec = decode(from, this);//вектор из имен в адрессе
+		Base *from_ = this, *to_ = this;
+		for (const auto& name : vec) {
+			from_ = from_->find_(name);
+		}
+		vec = decode(to, this);
+		for (const auto& name : vec) {
+			to_ = to_->find_(name);
+		}
+		if (!from_) cout << "Object " + from + " not found";
+		else if (!to_) cout << "Handler object " + to + " not found";
+		else {
+			from_->adress = from;
+			to_->adress = to;
+			from_->set_connect(to_);
+		}
+	}
+}
+
+string App::comands_moment() {
+	string str;
+	string msg;
+	string str_to_return = "";
+	bool f = false;
+	while (true) {
+		cin >> str;
+		if (str == "EMIT") {
+			cin >> str;
+			getline(cin, msg);
+			if (!find_decode(decode(str, ptr_base))) {
+				if (f) str_to_return += '\n';
+				str_to_return += "Object " + str + " not found";
+			}
+			else {
+				str = find_decode(decode(str, ptr_base))->emit(msg);
+				if (str != "") {
+					if (f) str_to_return += '\n';
+					str_to_return += str;
+				}
+			}
+			if (!f) f = true;
+		}
+		else if (str == "DELETE_CONNECT") {
+			cin >> str >> msg;
+			find_decode(decode(str, ptr_base))->delete_connect(find_decode(decode(msg, ptr_base)));
+		}
+		else if (str == "SET_CONDITION") {
+			cin >> str;
+			cin >> find_decode(decode(str, ptr_base))->ready;
+		}
+		else if (str == "SET_CONNECT") {
+			cin >> str >> msg;
+			Base* from = find_decode(decode(str, ptr_base)), *to = find_decode(decode(msg, ptr_base));
+			if (from && to) {
+				from->adress = str; //записываем адресса
+				to->adress = msg;//записываем адресса
+				from->set_connect(to);
+			}
+			if (!find_decode(decode(str, ptr_base))) {
+				if (f) str_to_return += '\n';
+				if (!f) f = true;
+				str_to_return += "\nObject " + str + " not found";
+			}
+			if (!find_decode(decode(msg, ptr_base))) {
+				if (f) str_to_return += '\n';
+				if (!f) f = true;
+				str_to_return += "\nHandler object " + msg + " not found";
+			}
+		}
+		else if (str == "END") return str_to_return;
+	}
+}
 
 void Base::set_name() {
 	cin >> this->name;
@@ -185,7 +340,7 @@ bool App::exe(bool f) {
 	this->new_out();
 	cout << endl;
 	if (f) { //если build_tree_new_new построен с ошибкой, то
-		cout << "The head object " << this->last_adress << " is not found"; 
+		cout << "The head object " << this->last_adress << " is not found";
 		return 0;
 	}
 	cout << set_find_moment(this);
@@ -305,7 +460,7 @@ bool App::build_tree_new_new() {
 		cin >> name;
 		this->last_adress = name;//запомним последний адресс для того, чтобы в случае ошибки вывести его.
 		if (name == "endtree") break; //конец ввода иерархии
-		
+
 
 		obj1 = (cl1*)this;//начинаем искать от корневого
 		if (name != "/") {//если имя родителя не /, то есть не головной
@@ -348,5 +503,6 @@ string is_ready(Base& obj) {
 
 int main() {
 	App app(nullptr);
-	return app.exe(app.build_tree_new_new());
+	app.build_tree_new_new();
+	return app.new_exe();
 }

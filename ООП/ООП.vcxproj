@@ -229,7 +229,10 @@
     <ClCompile Include="кл31.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="кл32.cpp" />
+    <ClCompile Include="кл32.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="кл33.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class2.h" />
