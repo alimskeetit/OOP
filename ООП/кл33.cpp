@@ -32,14 +32,17 @@ public:
 	void delete_connect(Base* p_obj);
 	virtual string get_class() { return "(class: 0)"; };
 	vector<Base*> connections;
-	void set_connections();
+	string set_connections();
 	Base* find_decode(const vector<string>& vec);
+	void set_ready_new(bool f);
+	Base* find__(string name);
 };
 
 Base* Base::find_decode(const vector<string>& vec) {
 	Base* obj = this;
 	for (auto& name : vec) {
-		obj = obj->find_(name);
+		obj = obj->find__(name);
+		if (!obj) break;
 	}
 	return obj;
 }
@@ -73,6 +76,7 @@ string Base::emit(const string& msg) {
 
 
 string Base::signal() {
+	
 	return "Signal from " + adress;
 }
 
@@ -191,23 +195,28 @@ public:
 	void build_tree_new();
 	bool build_tree_new_new();
 	bool exe(bool f = 0);
-	bool new_exe();//new
+	bool new_exe(bool f = 0);//new
 };
 
-bool App::new_exe() {
+bool App::new_exe(bool f) {
 	cout << "Object tree\n";
 	cout << this->get_name();
 	this->new_out();
 	cout << endl;
-
-	set_connections();
+	if (f) { //если build_tree_new_new построен с ошибкой, то
+		cout << "The head object " << this->last_adress << " is not found";
+		return 1;
+	}
+	cout << set_connections();
 	cout << comands_moment();
 	return 0;
 }
 
-void Base::set_connections() {
+string Base::set_connections() {
 	string from, to;
 	vector<string> vec;
+	string str_to_return;
+	bool f = false;
 	while (true) {
 		cin >> from;
 		if (from == "end_of_connections") break;
@@ -215,20 +224,31 @@ void Base::set_connections() {
 		vec = decode(from, this);//вектор из имен в адрессе
 		Base *from_ = this, *to_ = this;
 		for (const auto& name : vec) {
+			if (!from_) break;
 			from_ = from_->find_(name);
 		}
 		vec = decode(to, this);
 		for (const auto& name : vec) {
+			if (!to_) break;
 			to_ = to_->find_(name);
 		}
-		if (!from_) cout << "Object " + from + " not found";
-		else if (!to_) cout << "Handler object " + to + " not found";
-		else {
+		if (!from_) {
+			if (!f) str_to_return += '\n';
+			if (!f) f = true;
+			str_to_return += "Object " + from + " not found\n";
+		}
+		if (!to_) {
+			if (!f) str_to_return += '\n';
+			if (!f) f = true;
+			str_to_return += "Object " + to + " not found\n";
+		}
+		if (from_ && to_){
 			from_->adress = from;
 			to_->adress = to;
 			from_->set_connect(to_);
 		}
 	}
+	return str_to_return;
 }
 
 string App::comands_moment() {
@@ -243,24 +263,41 @@ string App::comands_moment() {
 			getline(cin, msg);
 			if (!find_decode(decode(str, ptr_base))) {
 				if (f) str_to_return += '\n';
+				if (!f) f = true;
 				str_to_return += "Object " + str + " not found";
 			}
 			else {
 				str = find_decode(decode(str, ptr_base))->emit(msg);
 				if (str != "") {
 					if (f) str_to_return += '\n';
+					if (!f) f = true;
 					str_to_return += str;
 				}
 			}
-			if (!f) f = true;
 		}
 		else if (str == "DELETE_CONNECT") {
 			cin >> str >> msg;
-			find_decode(decode(str, ptr_base))->delete_connect(find_decode(decode(msg, ptr_base)));
+			Base *from = find_decode(decode(str, ptr_base)), *to = find_decode(decode(msg, ptr_base));
+			if (from && to) {
+				from->adress = str; //записываем адресса
+				to->adress = msg;//записываем адресса
+				from->delete_connect(to);
+			}
+			if (!from) {
+				if (f) str_to_return += '\n';
+				if (!f) f = true;
+				str_to_return += "Object " + str + " not found";
+			}
+			else if (!to) {
+				if (f) str_to_return += '\n';
+				if (!f) f = true;
+				str_to_return += "Handler object " + msg + " not found";
+			}
 		}
 		else if (str == "SET_CONDITION") {
-			cin >> str;
-			cin >> find_decode(decode(str, ptr_base))->ready;
+			bool f;
+			cin >> str >> f;
+			find_decode(decode(str, ptr_base))->set_ready_new(f);
 		}
 		else if (str == "SET_CONNECT") {
 			cin >> str >> msg;
@@ -273,12 +310,12 @@ string App::comands_moment() {
 			if (!find_decode(decode(str, ptr_base))) {
 				if (f) str_to_return += '\n';
 				if (!f) f = true;
-				str_to_return += "\nObject " + str + " not found";
+				str_to_return += "Object " + str + " not found";
 			}
-			if (!find_decode(decode(msg, ptr_base))) {
+			else if (!find_decode(decode(msg, ptr_base))) {
 				if (f) str_to_return += '\n';
 				if (!f) f = true;
-				str_to_return += "\nHandler object " + msg + " not found";
+				str_to_return += "Handler object " + msg + " not found";
 			}
 		}
 		else if (str == "END") return str_to_return;
@@ -375,6 +412,15 @@ Base* Base::find_(const string& name) {
 	return nullptr;
 }
 
+Base* Base::find__(string name) {
+	if (this->name == name) return this;
+	for (auto it : this->childs) {
+		if (it->get_name() == name) return it;
+	}
+	return nullptr;
+}
+
+
 void Base::set_ready() {
 	string name;
 	int f;
@@ -395,6 +441,23 @@ void Base::set_ready() {
 		else {
 			ptr_find->unready_em_all();
 		}
+	}
+}
+
+void Base::set_ready_new(bool f) {
+	Base* ptr_parent = this->get_parent();
+	this->ready = f;
+	if (f) {
+		while (ptr_parent) {
+			if (ptr_parent->ready) ptr_parent = ptr_parent->get_parent();
+			else {
+				this->ready = false;
+				break;
+			}
+		}
+	}
+	else {
+		this->unready_em_all();
 	}
 }
 
@@ -466,6 +529,7 @@ bool App::build_tree_new_new() {
 		if (name != "/") {//если имя родителя не /, то есть не головной
 			vec = decode(name, *this);//вызываем функцию decode расшифровывающую адрес, и получаем вектор имён
 			for (auto& name : vec) {
+				if (!obj1) break;
 				obj1 = (cl1*)obj1->find_(name);//находим указатель на родителя, к которому пришпандорим ребенка
 			}
 		}
@@ -503,6 +567,5 @@ string is_ready(Base& obj) {
 
 int main() {
 	App app(nullptr);
-	app.build_tree_new_new();
-	return app.new_exe();
+	return app.new_exe(app.build_tree_new_new());
 }
